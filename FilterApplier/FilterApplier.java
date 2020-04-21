@@ -1,0 +1,5 @@
+package FilterApplier;
+
+class FilterApplier {
+	
+}
