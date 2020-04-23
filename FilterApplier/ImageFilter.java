@@ -10,7 +10,7 @@ abstract class ImageFilter {
 
 	abstract BufferedImage apply(String sourceImageFileName);
 
-	abstract boolean apply(BufferedImage sourceImage, String ouputFileName);
+	// abstract boolean apply(BufferedImage sourceImage, String ouputFileName);
 
-	abstract boolean apply(String sourceImageFileName, String outputFileName);
+	// abstract boolean apply(String sourceImageFileName, String outputFileName);
 }

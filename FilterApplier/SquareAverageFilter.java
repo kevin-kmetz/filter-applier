@@ -2,29 +2,33 @@ package FilterApplier;
 
 import java.util.ArrayList;
 
-class SquareAverageFilter extends ImageFilter {
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
+
+public class SquareAverageFilter extends ImageFilter {
 
 	int pixelRadius;
 
-	SquareAverageFilter() {
+	public SquareAverageFilter() {
 
 		this(1);
 
 	}
 
-	SquareAverageFilter(int pixelRadius) {
+	public SquareAverageFilter(int pixelRadius) {
 
 		this.pixelRadius = pixelRadius;
 
 	}
 
-	BufferedImage apply(BufferedImage sourceImage) {
+	public BufferedImage apply(BufferedImage sourceImage) {
 
 		BufferedImage outputImage = new BufferedImage(sourceImage.getWidth(), sourceImage.getHeight(), sourceImage.getType());
 
-		for (int y = 0; i < sourceImage.getHeight(); y++) {
+		for (int y = 0; y < sourceImage.getHeight(); y++) {
 
-			for (int x = 0; i < sourceImage.getWidth(); x++) {
+			for (int x = 0; x < sourceImage.getWidth(); x++) {
 
 				int newPixelRGB = calculateNewPixel(x, y, sourceImage);
 				outputImage.setRGB(x, y, newPixelRGB);
@@ -37,13 +41,22 @@ class SquareAverageFilter extends ImageFilter {
 
 	}
 
+	public BufferedImage apply(String sourceImageFileName) {
+
+		// This is a temporarily line to return a junk image for testing.
+		BufferedImage outputImage = new BufferedImage(600, 400, 1);
+
+		return outputImage;
+
+	}
+
 	private int calculateNewPixel(int sourceX, int sourceY, BufferedImage sourceImage) {
 
 		int originX = sourceX - pixelRadius;
 		int originY = sourceY - pixelRadius;
 		int sideLength = pixelRadius * 2 + 1;
 
-		ArrayList<Int> withinBoundsValues = new ArrayList<Int>();
+		ArrayList<Integer> withinBoundsValues = new ArrayList<Integer>();
 
 		for (int y = originY; y < originY + sideLength; y++) {
 
