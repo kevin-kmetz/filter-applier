@@ -10,7 +10,7 @@ class SquareAverageFilterTest {
 
 	public static void main(String[] args) {
 
-		SquareAverageFilter filter = new SquareAverageFilter(15);
+		SquareAverageFilter filter = new SquareAverageFilter(5);
 		
 		BufferedImage testImage;
 

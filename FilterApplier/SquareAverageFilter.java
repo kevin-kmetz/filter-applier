@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 
+import java.math.BigInteger;
+
 public class SquareAverageFilter extends ImageFilter {
 
 	int pixelRadius;
@@ -72,7 +74,7 @@ public class SquareAverageFilter extends ImageFilter {
 
 		}
 
-		int valueTotal = 0;
+		/*int valueTotal = 0;
 		int numberOfValues = withinBoundsValues.size();
 
 		for (int i : withinBoundsValues) {
@@ -81,7 +83,33 @@ public class SquareAverageFilter extends ImageFilter {
 
 		}
 
-		return valueTotal;
+		return valueTotal;*/
+
+		BigInteger valueTotal = new BigInteger("0");
+
+		Integer tempInt = new Integer(withinBoundsValues.size());
+		BigInteger numberOfValues = new BigInteger(tempInt.toString());
+
+		for (int i : withinBoundsValues) {
+
+			Integer addInteger = new Integer(i);
+			valueTotal = valueTotal.add(new BigInteger(addInteger.toString()));
+
+		}
+
+		valueTotal = valueTotal.divide(numberOfValues);
+
+		return valueTotal.intValue();
+
+		/*Float valueTotal = new Float(0.0);
+		int numberOfValues = withinBoundsValues.size();
+
+		for (int i : withinBoundsValues) {
+
+			valueTotal += (float)i / numberOfValues;
+		}
+
+		return valueTotal.intValue();*/
 
 	}
 
