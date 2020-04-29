@@ -1,16 +1,16 @@
 package FilterApplier.Tests;
 
-import FilterApplier.SquareAverageFilter;
+import FilterApplier.BoxBlurFilter;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 
-class SquareAverageFilterTest {
+class BoxBlurFilterTest {
 
 	public static void main(String[] args) {
 
-		SquareAverageFilter filter = new SquareAverageFilter(1);
+		BoxBlurFilter filter = new BoxBlurFilter(1);
 		
 		BufferedImage testImage;
 
@@ -18,9 +18,15 @@ class SquareAverageFilterTest {
 
 			testImage = (ImageIO.read(new File(args[0])));
 
-			BufferedImage resultingImage = filter.apply(testImage);
+			//BufferedImage resultingImage = filter.apply(testImage);
 
-			File output = new File("filtered_" + args[0]);
+			BufferedImage resultingImage = testImage;
+
+			for (int i = 100; i > 0; i--) {
+				resultingImage = filter.apply(resultingImage);
+			}
+
+			File output = new File("bbfiltered_" + args[0]);
 			output.createNewFile();
 
 			ImageIO.write(resultingImage, "png", output);
