@@ -1,6 +1,5 @@
 package FilterApplier;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import java.awt.image.BufferedImage;
@@ -32,17 +31,39 @@ public class ChunkScramblerFilter extends ImageFilter {
 		// Calculate the number of normally-sized chunks (abnormally-sized chunks are handled later).
 		int numberOfHorizontalChunks = sourceImage.getWidth() / chunkWidth;
 		int numberOfVerticalChunks = sourceImage.getHeight() / chunkHeight;
+		int numberOfNormalChunks = numberOfHorizontalChunks * numberOfVerticalChunks;
 
-		for (int y = 0; y < numberOfVerticalChunks; y++) {
+		int[] chunkIndexes = new int[numberOfNormalChunks];
 
-			for (int x = 0; x < numberOfHorizontalChunks; x++) {
+		for (int i = 0; i < chunkIndexes.length; i++) {
+			chunkIndexes[i] = i;
+		}
 
-				scrambleChunk(sourceImage, outputImage, x * chunkWidth, y * chunkHeight, chunkWidth, chunkHeight);
+		shuffleArray(chunkIndexes);
+
+		for (int i = 0; i < numberOfNormalChunks; i++) {
+
+			int sourceXStart = (chunkIndexes[i] % numberOfHorizontalChunks) * chunkWidth;;
+			int sourceYStart = (chunkIndexes[i] / numberOfHorizontalChunks) * chunkHeight;
+			int outputXStart = (i % numberOfHorizontalChunks) * chunkWidth;
+			int outputYStart = (i / numberOfHorizontalChunks) * chunkHeight;
+
+			for (int y = 0; y < chunkHeight; y++) {
+
+				for (int x = 0; x < chunkWidth; x++) {
+
+					//System.out.println("Output: " + (outputXStart + x) + ", " + (outputYStart + y));
+					//System.out.println("Source: " + (sourceXStart + x) + ", " + (sourceYStart + y));
+
+					outputImage.setRGB(outputXStart + x, outputYStart + y, sourceImage.getRGB(sourceXStart + x, sourceYStart + y));
+
+				}
 
 			}
 
 		}
 
+		/*
 		// Calculate if there are leftover abnormal chunks to see if abnormally-sized edge chunks to need to be processed.
 		int leftOverColumnWidth = sourceImage.getWidth() % chunkWidth;
 		int leftOverRowHeight = sourceImage.getHeight() % chunkHeight;
@@ -79,6 +100,7 @@ public class ChunkScramblerFilter extends ImageFilter {
 			scrambleChunk(sourceImage, outputImage, numberOfHorizontalChunks * chunkWidth, numberOfVerticalChunks * chunkHeight, leftOverColumnWidth, leftOverRowHeight);
 
 		}
+		*/
 
 		return outputImage;
 
@@ -93,43 +115,18 @@ public class ChunkScramblerFilter extends ImageFilter {
 
 	}
 
-	private void scrambleChunk(BufferedImage sourceImage, BufferedImage outputImage, int chunkXPosition, int chunkYPosition, int chunkWidth, int chunkHeight) {
-
-		int[] pixels = new int[chunkWidth * chunkHeight];
-
-		// Get the source pixels that need shuffling and store them into a static array.
-		for (int y = chunkYPosition, index = 0; y < chunkYPosition + chunkHeight; y++) {
-
-			for (int x = chunkXPosition; x < chunkXPosition + chunkWidth; x++, index++) {
-
-				pixels[index] = sourceImage.getRGB(x, y);
-
-			}
-
-		}
+	private void shuffleArray(int[] array) {
 
 		Random random = new Random();
+		int selectedIndex = 0;
+		int tempInt = 0;
 
-		// Randomly order the pixels from the chunk in a static array, to avoid sluggish dynamic resizing.
-		for (int upperLimit = pixels.length, selectedIndex = 0, tempColor = 0; upperLimit > 0; upperLimit--) {
+		for (int i = array.length; i > 0; i--) {
 
-			selectedIndex = random.nextInt(upperLimit);
-
-			tempColor = pixels[upperLimit - 1];
-			pixels[upperLimit - 1] = pixels[selectedIndex];
-			pixels[selectedIndex] = tempColor;
-
-
-		}
-
-		// Place the reordered colors back into the corresponding image chunk.
-		for (int y = chunkYPosition, index = 0; y < chunkYPosition + chunkHeight; y++) {
-
-			for (int x = chunkXPosition; x < chunkXPosition + chunkWidth; x++, index++) {
-
-				outputImage.setRGB(x, y, pixels[index]);
-
-			}
+			selectedIndex = random.nextInt(i);
+			tempInt = array[i - 1];
+			array[i - 1] = array[selectedIndex];
+			array[selectedIndex] = tempInt;
 
 		}
 
