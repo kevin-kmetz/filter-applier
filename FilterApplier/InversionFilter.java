@@ -1,5 +1,6 @@
 package FilterApplier;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -14,7 +15,12 @@ public class InversionFilter extends ImageFilter {
 
 			for (int x = 0; x < sourceImage.getWidth(); x++) {
 
-				outputImage.setRGB(x, y, Integer.MAX_VALUE - sourceImage.getRGB(x, y));
+				// outputImage.setRGB(x, y, Integer.MAX_VALUE - sourceImage.getRGB(x, y));
+
+				Color sourceColor = new Color(sourceImage.getRGB(x, y));
+				Color outputColor = new Color(255 - sourceColor.getRed(), 255 - sourceColor.getGreen(), 255 - sourceColor.getBlue());
+
+				outputImage.setRGB(x, y, outputColor.getRGB());
 
 			}
 
